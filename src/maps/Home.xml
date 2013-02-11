@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Map gridSize="48" width="28" height="16">
+	<Image id="0" path="example"/>
+	
+	<Tileset id="0" width="2" height="2" imageId="0" texture="grass0000"/>
+	
+	<Layer id="bg" type="0" z="0" visible="1">
+		<Tile id="tile1" type="0" ix="0" iy="0"  weight="0" event="null" tilesetId="0"/>
+	</Layer>
+	
+</Map>

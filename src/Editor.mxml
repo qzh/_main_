@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					   xmlns:s="library://ns.adobe.com/flex/spark" 
+					   xmlns:mx="library://ns.adobe.com/flex/mx" 
+					   name="TileEditor" width="1024" height="768" showStatusBar="false" backgroundAlpha="0"
+					   creationComplete="application_creationCompleteHandler(event)">
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import tile.managers.MapManager;
+			import tile.render.StarlingRoot;
+			
+			protected function application_creationCompleteHandler(event:FlexEvent):void
+			{
+				MapManager.getInstance().load();
+				
+				var vp:Rectangle = new Rectangle(container.x, container.y, container.width, container.height);
+				var star:StarlingRoot = new StarlingRoot(vp);
+				container.addElement(star);
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Button x="11" y="10" width="107" height="35" label="Save..."/>
+	<s:List id="layerList" x="10" y="55" width="250" height="300"></s:List>
+	<s:Button id="addLayerButton" x="10" y="363" label="+ Layer"/>
+	<s:Button id="deleteLayerButton" x="84" y="364" label="- Layer"/>
+	<s:List x="10" y="400" width="250" height="300"></s:List>
+	<s:Button id="addImageButton" x="10" y="708" label="+ Image"/>
+	<s:Button id="removeImageButton" x="88" y="708" label="- Image"/>
+	<s:List id="tilesetList" x="794" y="55" width="220" height="645"></s:List>
+	<s:Button id="addTilesetButton" x="866" y="708" label="+ Tileset"/>
+	<s:Button id="deleteTilesetButton" x="944" y="708" label="- Tileset"/>
+	<s:BorderContainer id="container" x="268" y="55" width="518" height="645" backgroundAlpha="0"
+					   borderColor="#000000" borderStyle="solid" borderWeight="1"/>
+</s:WindowedApplication>
