@@ -18,7 +18,7 @@ package tile.managers
 		
 		public function load():void
 		{
-			var file:File = new File("/Users/Qizhi/Documents/flex/_main_/src/maps/Home.xml");
+			var file:File = new File("/Users/Qizhi/Documents/flex/_main_/Editor/src/maps/Home.xml");
 			var stream:FileStream = new FileStream();
 			stream.open(file, FileMode.READ);
 			var string:String = stream.readUTFBytes(stream.bytesAvailable);
