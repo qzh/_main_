@@ -3,7 +3,6 @@ package tile.core
 	public class Layer implements TileCodec
 	{
 		public var id:String;
-		public var type:int;
 		public var z:int;
 		public var visible:int;
 		
@@ -19,7 +18,6 @@ package tile.core
 			this.tiles = [];
 			
 			this.id = src.@id;
-			this.type = parseInt(src.@type);
 			this.z = parseInt(src.@z);
 			this.visible = parseInt(src.@visible);
 			
@@ -34,7 +32,7 @@ package tile.core
 		
 		public function toXML():XML
 		{
-			var ret:XML = <Layer id={id} type={type} z={z} visible={visible}/>;
+			var ret:XML = <Layer id={id} z={z} visible={visible}/>;
 			for each(var t:Tile in this.tiles)
 			{
 				ret.appendChild(t.toXML());
@@ -44,10 +42,9 @@ package tile.core
 		
 		public function toTable():String
 		{
-			var ret:String = '\n    {type="Layer", id="@id", type=@type, z=@z, v=@v tiles={@tiles \n      }\n    }';
+			var ret:String = '\n    {type="Layer", id="@id", z=@z, v=@v tiles={@tiles \n      }\n    }';
 			
 			ret = ret.replace("@id", id);
-			ret = ret.replace("@type", type);
 			ret = ret.replace("@z", z);
 			ret = ret.replace("@v", visible);
 			

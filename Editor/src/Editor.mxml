@@ -8,16 +8,57 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import tile.core.Layer;
+			import tile.core.TileImage;
+			import tile.core.Tileset;
 			import tile.managers.MapManager;
+			import tile.managers.ResourceManager;
 			import tile.render.StarlingRoot;
 			
 			protected function application_creationCompleteHandler(event:FlexEvent):void
 			{
 				MapManager.getInstance().load();
+				MapManager.getInstance().refreshSource();
 				
 				var vp:Rectangle = new Rectangle(container.x, container.y, container.width, container.height);
 				var star:StarlingRoot = new StarlingRoot(vp);
 				container.addElement(star);
+			}
+			
+			protected function addLayerButton_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function deleteLayerButton_clickHandler(event:MouseEvent):void
+			{
+				var layer:Layer = layerList.selectedItem as Layer;
+				if(layer)MapManager.getInstance().source.removeItem(layer, MapManager.getInstance().source.layers);
+			}
+			
+			protected function addImageButton_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function removeImageButton_clickHandler(event:MouseEvent):void
+			{
+				var image:TileImage = imageList.selectedItem as TileImage;
+				if(image)MapManager.getInstance().source.removeItem(image, MapManager.getInstance().source.images);
+			}
+			
+			protected function addTilesetButton_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+			protected function deleteTilesetButton_clickHandler(event:MouseEvent):void
+			{
+				var tile:Tileset = tilesetList.selectedItem as Tileset;
+				if(tile)MapManager.getInstance().source.removeItem(tile, MapManager.getInstance().source.tilesets);
 			}
 			
 		]]>
@@ -26,15 +67,27 @@
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
 	<s:Button x="11" y="10" width="107" height="35" label="Save..."/>
-	<s:List id="layerList" x="10" y="55" width="250" height="300"></s:List>
-	<s:Button id="addLayerButton" x="10" y="363" label="+ Layer"/>
-	<s:Button id="deleteLayerButton" x="84" y="364" label="- Layer"/>
-	<s:List x="10" y="400" width="250" height="300"></s:List>
-	<s:Button id="addImageButton" x="10" y="708" label="+ Image"/>
-	<s:Button id="removeImageButton" x="88" y="708" label="- Image"/>
-	<s:List id="tilesetList" x="794" y="55" width="220" height="645"></s:List>
-	<s:Button id="addTilesetButton" x="866" y="708" label="+ Tileset"/>
-	<s:Button id="deleteTilesetButton" x="944" y="708" label="- Tileset"/>
+	<s:List id="layerList" x="10" y="55" width="250" height="300"
+			dataProvider="{MapManager.getInstance().source.layers}"
+			itemRenderer="editor.view.LayerItemRenderer"></s:List>
+	<s:Button id="addLayerButton" x="10" y="363" label="+ Layer"
+			  click="addLayerButton_clickHandler(event)" enabled="false"/>
+	<s:Button id="deleteLayerButton" x="92" y="363" label="- Layer"
+			  click="deleteLayerButton_clickHandler(event)"/>
+	<s:List id="imageList" x="10" y="400" width="250" height="300"
+			dataProvider="{MapManager.getInstance().source.images}"
+			itemRenderer="editor.view.ImageItemRenderer"></s:List>
+	<s:Button id="addImageButton" x="10" y="708" label="+ Image"
+			  click="addImageButton_clickHandler(event)" enabled="false"/>
+	<s:Button id="removeImageButton" x="92" y="708" label="- Image"
+			  click="removeImageButton_clickHandler(event)"/>
+	<s:List id="tilesetList" x="794" y="55" width="220" height="645"
+			dataProvider="{MapManager.getInstance().source.tilesets}"
+			itemRenderer="editor.view.TilesetItemRenderer"></s:List>
+	<s:Button id="addTilesetButton" x="861" y="708" label="+ Tileset"
+			  click="addTilesetButton_clickHandler(event)"/>
+	<s:Button id="deleteTilesetButton" x="944" y="708" label="- Tileset"
+			  click="deleteTilesetButton_clickHandler(event)"/>
 	<s:BorderContainer id="container" x="268" y="55" width="518" height="645" backgroundAlpha="0"
 					   borderColor="#000000" borderStyle="solid" borderWeight="1"/>
 </s:WindowedApplication>

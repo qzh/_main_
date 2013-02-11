@@ -1,5 +1,7 @@
 package tile.managers
 {
+	import editor.data.DataSource;
+	
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -12,8 +14,12 @@ package tile.managers
 		
 		public var currentMap:Map;
 		
+		[Bindable]
+		public var source:DataSource;
+		
 		public function MapManager()
 		{
+			source = new DataSource();
 		}
 		
 		public function load():void
@@ -28,9 +34,11 @@ package tile.managers
 			map.fromXML(mapXML);
 			
 			this.currentMap = map;
-			
-			trace(map.toXML());
-			trace(map.toTable());
+		}
+		
+		public function refreshSource():void
+		{
+			source.fromMap(this.currentMap);
 		}
 		
 		public static function getInstance():MapManager

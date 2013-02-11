@@ -17,6 +17,11 @@ package tile.core
 			this.layers = [];
 		}
 		
+		public function sortForRenderer():void
+		{
+			layers.sortOn("z", Array.NUMERIC);
+		}
+		
 		public function fromXML(src:XML):void
 		{
 			this.images = [];

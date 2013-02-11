@@ -9,6 +9,8 @@ package tile.render
 	import starling.events.Event;
 	
 	import tile.managers.Director;
+	import tile.managers.MapManager;
+	import tile.managers.ResourceManager;
 	
 	public final class StarlingRoot extends GroupBase
 	{
@@ -48,8 +50,12 @@ package tile.render
 		
 		private function onRootCreated(event:starling.events.Event, game:RootScene):void
 		{
-			var s:MapScene = new MapScene();
-			Director.getInstance().startup(game, s);
+			function onResoourceComplete():void
+			{
+				var s:MapScene = new MapScene();
+				Director.getInstance().startup(game, s);
+			}
+			ResourceManager.getInstance().load(MapManager.getInstance().currentMap, onResoourceComplete);
 		}
 	}
 }
