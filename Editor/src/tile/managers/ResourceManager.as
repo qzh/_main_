@@ -1,5 +1,13 @@
 package tile.managers
 {
+	import editor.data.BitmapSet;
+	import editor.data.TilesetX;
+	
+	import flash.display.BitmapData;
+	import flash.utils.Dictionary;
+	
+	import mx.collections.ArrayCollection;
+	
 	import starling.utils.AssetManager;
 	
 	import tile.core.Map;
@@ -26,11 +34,48 @@ package tile.managers
 			}
 			assetManager.enqueue(array);
 			
+			var isComplete:Boolean = false;
 			function onLoadAssets(r:Number):void
 			{
-				if(r >= 1)onComplete();
+				if(r >= 1 && !isComplete)
+				{
+					isComplete = true;
+					onComplete();
+					
+					var tilesets:Array = MapManager.getInstance().source.tilesets.source;
+					for each(var p:TilesetX in tilesets)
+					{
+						var imageName:String = MapManager.getInstance().getImageName(p.imageId);
+						var bmd:BitmapSet = getBitmapData(imageName, p.texture);
+						p.bitmap = bmd.bitmap;
+					}
+				}
 			}
 			assetManager.loadQueue(onLoadAssets);
+		}
+		
+		public function getBitmapData(textureName:String, subName:String):BitmapSet
+		{
+			var store:BitmapStore = assetManager.bitmapStore[textureName];
+			if(store)
+			{
+				return store.getAtlas(subName);
+			}
+			return null;
+		}
+		
+		public function getAllBitmapList(textureName:String):ArrayCollection
+		{
+			var ret:ArrayCollection = new ArrayCollection();
+			var store:BitmapStore = assetManager.bitmapStore[textureName];
+			if(store)
+			{
+				for each(var sets:BitmapSet in store.atlasMap)
+				{
+					ret.addItem(sets);
+				}
+			}
+			return ret;
 		}
 		
 		private static var _instance:ResourceManager;

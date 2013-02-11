@@ -6,7 +6,10 @@
 					   creationComplete="application_creationCompleteHandler(event)">
 	<fx:Script>
 		<![CDATA[
+			import editor.view.NewTilesetPanel;
+			
 			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
 			
 			import tile.core.Layer;
 			import tile.core.TileImage;
@@ -51,8 +54,9 @@
 			
 			protected function addTilesetButton_clickHandler(event:MouseEvent):void
 			{
-				// TODO Auto-generated method stub
-				
+				var panel:NewTilesetPanel = new NewTilesetPanel();
+				PopUpManager.addPopUp(panel, this, true);
+				PopUpManager.centerPopUp(panel);
 			}
 			
 			protected function deleteTilesetButton_clickHandler(event:MouseEvent):void
@@ -61,12 +65,17 @@
 				if(tile)MapManager.getInstance().source.removeItem(tile, MapManager.getInstance().source.tilesets);
 			}
 			
+			protected function saveButton_clickHandler(event:MouseEvent):void
+			{
+				MapManager.getInstance().save();
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	<s:Button x="11" y="10" width="107" height="35" label="Save..."/>
+	<s:Button x="11" y="10" id="saveButton" width="107" height="35" label="Save..." click="saveButton_clickHandler(event)"/>
 	<s:List id="layerList" x="10" y="55" width="250" height="300"
 			dataProvider="{MapManager.getInstance().source.layers}"
 			itemRenderer="editor.view.LayerItemRenderer"></s:List>

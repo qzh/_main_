@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:TitleWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   x="726" y="78" width="900" height="512" close="titlewindow1_closeHandler(event)"
+			   creationComplete="titlewindow1_creationCompleteHandler(event)" title="New Tileset">
+	<fx:Script>
+		<![CDATA[
+			import editor.data.BitmapSet;
+			import editor.data.TilesetX;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.CloseEvent;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import spark.components.supportClasses.GroupBase;
+			import spark.events.IndexChangeEvent;
+			
+			import tile.core.Map;
+			import tile.core.TileImage;
+			import tile.managers.MapManager;
+			import tile.managers.ResourceManager;
+			import tile.utils.TileUtil;
+			
+			private var image:TileImage;
+			private var container:GroupBase;
+			
+			protected function titlewindow1_closeHandler(event:CloseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			
+			protected function okButton_clickHandler(event:MouseEvent):void
+			{
+				var img:BitmapSet = imageList.selectedItem as BitmapSet;
+				if(idInput.text.length > 0 && image && img)
+				{
+					var t:TilesetX = new TilesetX();
+					t.id = idInput.text;
+					t.weight = weightStepper.value;
+					t.width = widthStepper.value;
+					t.height = heightStepper.value;
+					
+					t.imageId = image.id;
+					t.texture = img.label;
+					t.bitmap = img.bitmap;
+					
+					MapManager.getInstance().source.tilesets.addItem(t);
+					PopUpManager.removePopUp(this);
+				}
+			}
+			
+			protected function titlewindow1_creationCompleteHandler(event:FlexEvent):void
+			{
+				container = new GroupBase();
+				this.previewContainer.addElement(container);
+				
+				var map:Map = MapManager.getInstance().currentMap;
+				var w:int = previewContainer.width/map.gridSize;
+				TileUtil.drawGrid(container.graphics, map.gridSize, w, w);
+				
+				var shape:Sprite = new Sprite();
+				
+				for(var i:int = 0; i < w; i++)
+				{
+					for(var j:int = 0; j < w; j++)
+					{
+						var label:TextField = new TextField();
+						label.textColor = 0;
+						label.selectable = false;
+						label.text = i + "," + j;
+						label.y = j * map.gridSize + (map.gridSize - label.textWidth)/2;
+						label.x = i * map.gridSize + (map.gridSize - label.textHeight)/2;
+						shape.addChild(label);
+					}
+				}
+				
+				container.addChild(shape);
+				
+				var img:TileImage = MapManager.getInstance().source.images.getItemAt(0) as TileImage;
+				setImageListSrc(img);
+			}
+			
+			protected function imageCombo_changeHandler(event:IndexChangeEvent):void
+			{
+				var img:TileImage = imageCombo.selectedItem as TileImage;
+				setImageListSrc(img);
+			}
+			
+			private function setImageListSrc(img:TileImage):void
+			{
+				if(img && image != img)
+				{
+					image = img;
+					var list:ArrayCollection = ResourceManager.getInstance().getAllBitmapList(img.path);
+					imageList.dataProvider = list;
+				}
+			}
+			
+			protected function imageList_changeHandler(event:IndexChangeEvent):void
+			{
+				var img:BitmapSet = imageList.selectedItem as BitmapSet;
+				if(img)
+				{
+					this.imagePreview.source = img.bitmap
+				}
+				else
+				{
+					this.imagePreview.source = null;
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<s:Button id="okButton" x="359" y="425" width="181" height="44" label="OK"
+			  click="okButton_clickHandler(event)"/>
+	<s:List id="imageList" x="10" y="10" width="582" height="361" 
+			change="imageList_changeHandler(event)"
+			itemRenderer="editor.view.ImagePresetItemRenderer">
+		<s:layout>
+			<s:TileLayout/>
+		</s:layout>
+	</s:List>
+	<s:ComboBox id="imageCombo" x="600" y="10" change="imageCombo_changeHandler(event)"
+				dataProvider="{MapManager.getInstance().source.images}" labelField="path"
+				selectedIndex="0"/>
+	<s:BorderContainer id="previewContainer" x="600" y="41" width="288" height="288">
+		<s:BitmapImage id="imagePreview" x="0" y="0" width="288" height="288" scaleMode="zoom" fillMode="clip" horizontalAlign="left" verticalAlign="top"/>
+	</s:BorderContainer>
+	<s:NumericStepper id="widthStepper" x="10" y="379" minimum="1" stepSize="1" value="2"/>
+	<s:NumericStepper id="heightStepper" x="71" y="379" minimum="1" stepSize="1" value="2"/>
+	<s:NumericStepper id="weightStepper" x="539" y="379" minimum="0" stepSize="1" value="0"/>
+	<s:TextInput id="idInput" x="132" y="380" width="399"/>
+</s:TitleWindow>

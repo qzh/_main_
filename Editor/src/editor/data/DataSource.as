@@ -48,7 +48,8 @@ package editor.data
 			}
 			for each(var ts:Tileset in map.tilesets)
 			{
-				tilesets.addItem(ts);
+				var tx:TilesetX = new TilesetX(ts);
+				tilesets.addItem(tx);
 			}
 			
 			layers.refresh();

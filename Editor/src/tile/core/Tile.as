@@ -8,7 +8,6 @@ package tile.core
 		public var ix:int;
 		public var iy:int;
 		
-		public var weight:int;
 		public var event:String;
 		public var tilesetId:String;
 		
@@ -24,20 +23,19 @@ package tile.core
 			this.ix = parseInt(src.@ix);
 			this.iy = parseInt(src.@iy);
 			
-			this.weight = parseInt(src.@weight);
 			this.event = src.@event;
 			this.tilesetId = src.@imageId;
 		}
 		
 		public function toXML():XML
 		{
-			var ret:XML = <Tile id={id} type={type} ix={ix} iy={iy} weight={weight} event={event} tilesetId={tilesetId}/>;
+			var ret:XML = <Tile id={id} type={type} ix={ix} iy={iy} event={event} tilesetId={tilesetId}/>;
 			return ret;
 		}
 		
 		public function toTable():String
 		{
-			var ret:String = '\n        {type="Tile", id="@id", type=@type, ix=@ix, iy=@iy weight=@weight, event="@event", tilesetId="@tilesetId"}';
+			var ret:String = '\n        {type="Tile", id="@id", type=@type, ix=@ix, iy=@iy, event="@event", tilesetId="@tilesetId"}';
 			
 			ret = ret.replace("@id", id);
 			ret = ret.replace("@type", type);
@@ -45,7 +43,6 @@ package tile.core
 			ret = ret.replace("@ix", ix);
 			ret = ret.replace("@iy", iy);
 			
-			ret = ret.replace("@weight", weight);
 			ret = ret.replace("@event", event);
 			ret = ret.replace("@tilesetId", tilesetId);
 			

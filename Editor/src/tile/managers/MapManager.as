@@ -7,9 +7,12 @@ package tile.managers
 	import flash.filesystem.FileStream;
 	
 	import tile.core.Map;
+	import tile.core.TileImage;
 
 	public final class MapManager
 	{
+		private static const kDebugMap:String = "/Users/Qizhi/Documents/flex/_main_/Editor/src/maps/Home.xml";
+		
 		private static var _instance:MapManager;
 		
 		public var currentMap:Map;
@@ -24,7 +27,7 @@ package tile.managers
 		
 		public function load():void
 		{
-			var file:File = new File("/Users/Qizhi/Documents/flex/_main_/Editor/src/maps/Home.xml");
+			var file:File = new File(kDebugMap);
 			var stream:FileStream = new FileStream();
 			stream.open(file, FileMode.READ);
 			var string:String = stream.readUTFBytes(stream.bytesAvailable);
@@ -32,13 +35,40 @@ package tile.managers
 			
 			var map:Map = new Map();
 			map.fromXML(mapXML);
-			
+			stream.close();
 			this.currentMap = map;
+		}
+		
+		public function save():void
+		{
+			var file:File = new File(kDebugMap);
+			var stream:FileStream = new FileStream();
+			stream.open(file, FileMode.WRITE);
+			
+			currentMap.layers = source.layers.source;
+			currentMap.images = source.images.source;
+			currentMap.tilesets = source.tilesets.source;
+			
+			var mapXML:XML = currentMap.toXML();
+			var str:String = '<?xml version="1.0" encoding="UTF-8"?>\n' + mapXML.toXMLString();
+			
+			stream.writeUTFBytes(str);
+			stream.close();
 		}
 		
 		public function refreshSource():void
 		{
 			source.fromMap(this.currentMap);
+		}
+		
+		public function getImageName(imageId:int):String
+		{
+			var arr:Array = source.images.source;
+			for each(var p:TileImage in arr)
+			{
+				if(p.id == imageId)return p.path;
+			}
+			return null;
 		}
 		
 		public static function getInstance():MapManager

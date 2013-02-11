@@ -27,6 +27,8 @@ package starling.utils
     import starling.textures.Texture;
     import starling.textures.TextureAtlas;
     
+    import tile.managers.BitmapStore;
+    
     /** The AssetManager handles loading and accessing a variety of asset types. You can 
      *  add assets directly (via the 'add...' methods) or asynchronously via a queue. This allows
      *  you to deal with assets in a unified way, no matter if they are loaded from a file, 
@@ -48,6 +50,8 @@ package starling.utils
         private var mTextures:Dictionary;
         private var mAtlases:Dictionary;
         private var mSounds:Dictionary;
+		
+		public var bitmapStore:Dictionary;
         
         /** helper objects */
         private var sNames:Vector.<String> = new <String>[];
@@ -63,6 +67,8 @@ package starling.utils
             mTextures = new Dictionary();
             mAtlases = new Dictionary();
             mSounds = new Dictionary();
+			
+			bitmapStore = new Dictionary();
         }
         
         /** Disposes all contained textures. */
@@ -377,6 +383,9 @@ package starling.utils
                         var atlasTexture:Texture = getTexture(name);
                         addTextureAtlas(name, new TextureAtlas(atlasTexture, xml));
                         removeTexture(name, false);
+						
+						var store:BitmapStore = bitmapStore[name];
+						if(store)store.updateAtlas(xml);
                     }
                     else if (rootNode == "font")
                     {
@@ -547,6 +556,7 @@ package starling.utils
         protected function addBitmapTexture(name:String, bitmap:Bitmap):void
         {
             addTexture(name, Texture.fromBitmap(bitmap, mUseMipMaps, false, mScaleFactor));
+			bitmapStore[name] = new BitmapStore(bitmap);
         }
         
         // properties
