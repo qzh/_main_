@@ -5,12 +5,19 @@ package tile.managers
 
 	public final class Director
 	{
+		public static const kSelectTool:int = 0;
+		public static const kAddTileTool:int = 1;
+		public static const kDelTileTool:int = 2;
+		public static const kEditTileTool:int = 3;
+		
 		private var root:RootScene;
 		
 		public var runningScene:Scene;
 		
 		public var screenWidth:int;
 		public var screenHeight:int;
+		
+		public var toolsMode:int;
 		
 		private static var _instance:Director;
 		public function Director()

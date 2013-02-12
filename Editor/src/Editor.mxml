@@ -11,9 +11,12 @@
 			import mx.events.FlexEvent;
 			import mx.managers.PopUpManager;
 			
+			import spark.events.IndexChangeEvent;
+			
 			import tile.core.Layer;
 			import tile.core.TileImage;
 			import tile.core.Tileset;
+			import tile.managers.Director;
 			import tile.managers.MapManager;
 			import tile.managers.ResourceManager;
 			import tile.render.StarlingRoot;
@@ -28,7 +31,9 @@
 				container.addElement(star);
 				
 				var layerLength:int = MapManager.getInstance().source.layers.length;
-				layerList.selectedItem = MapManager.getInstance().source.layers.getItemAt(layerLength-1);
+				var selectedLayer:Layer = MapManager.getInstance().source.layers.getItemAt(layerLength-1) as Layer;
+				layerList.selectedItem = selectedLayer;
+				MapManager.getInstance().currentLayer = selectedLayer;
 			}
 			
 			protected function addLayerButton_clickHandler(event:MouseEvent):void
@@ -74,13 +79,36 @@
 			}
 			
 			
+			protected function layerList_changeHandler(event:IndexChangeEvent):void
+			{
+				var layer:Layer = layerList.selectedItem as Layer;
+				if(layer)
+				{
+					MapManager.getInstance().currentLayer = layer;
+				}
+			}
+			
+			protected function tileTools_changeHandler(event:Event):void
+			{
+				var selectedValue:int = int(TileTools.selectedValue);
+				Director.getInstance().toolsMode = selectedValue;
+			}
+			
+			protected function tilesetList_changeHandler(event:IndexChangeEvent):void
+			{
+				var selectedTileset:Tileset = tilesetList.selectedItem as Tileset;
+				MapManager.getInstance().currentTileset = selectedTileset;
+			}
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<s:RadioButtonGroup id="TileTools"/>
+		<s:RadioButtonGroup id="TileTools" change="tileTools_changeHandler(event)"/>
 	</fx:Declarations>
-	<s:Button x="11" y="10" id="saveButton" width="107" height="35" label="Save..." click="saveButton_clickHandler(event)"/>
-	<s:List id="layerList" x="10" y="55" width="250" height="300"
+	<s:Button x="11" y="10" id="saveButton" width="107" height="35" label="Save..." 
+			  click="saveButton_clickHandler(event)"/>
+	<s:List id="layerList" x="10" y="55" width="250" height="300" 
+			change="layerList_changeHandler(event)"
 			dataProvider="{MapManager.getInstance().source.layers}"
 			itemRenderer="editor.view.LayerItemRenderer"></s:List>
 	<s:Button id="addLayerButton" x="10" y="363" label="+ Layer"
@@ -94,7 +122,8 @@
 			  click="addImageButton_clickHandler(event)" enabled="false"/>
 	<s:Button id="removeImageButton" x="92" y="708" label="- Image"
 			  click="removeImageButton_clickHandler(event)" enabled="false"/>
-	<s:List id="tilesetList" x="794" y="55" width="220" height="645"
+	<s:List id="tilesetList" x="794" y="55" width="220" height="645" 
+			change="tilesetList_changeHandler(event)"
 			dataProvider="{MapManager.getInstance().source.tilesets}"
 			itemRenderer="editor.view.TilesetItemRenderer"></s:List>
 	<s:Button id="addTilesetButton" x="861" y="708" label="+ Tileset"
@@ -104,10 +133,10 @@
 	<s:BorderContainer id="container" x="268" y="55" width="518" height="645" backgroundAlpha="0"
 					   borderColor="#000000" borderStyle="solid" borderWeight="1"/>
 	<s:HGroup x="413" y="30">
-		<s:RadioButton label="Select" groupName="TileTools" id="selectTileRadio" selected="true"/>
-		<s:RadioButton label="+ Tile" groupName="TileTools" id="addTileRadio"/>
-		<s:RadioButton label="- Tile" groupName="TileTools" id="deleteTileRadio"/>
-		<s:RadioButton label="Edit" groupName="TileTools" id="editTileRadio"/>
+		<s:RadioButton label="Select" groupName="TileTools" id="selectTileRadio" selected="true" value="0"/>
+		<s:RadioButton label="+ Tile" groupName="TileTools" id="addTileRadio" value="1"/>
+		<s:RadioButton label="- Tile" groupName="TileTools" id="deleteTileRadio" value="2"/>
+		<s:RadioButton label="Edit" groupName="TileTools" id="editTileRadio" value="3"/>
 	</s:HGroup>
 	
 </s:WindowedApplication>

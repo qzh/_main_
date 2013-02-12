@@ -6,8 +6,17 @@
   <Layer id="background" z="0" visible="1">
     <Tile id="t1" type="0" ix="0" iy="0" event="null" tilesetId="grass"/>
     <Tile id="t2" type="0" ix="4" iy="0" event="null" tilesetId="grass"/>
+    <Tile id="1360657742540-8332" type="0" ix="8" iy="0" event="null" tilesetId="grass"/>
+    <Tile id="1360657743498-2836" type="0" ix="12" iy="0" event="null" tilesetId="grass"/>
+    <Tile id="1360657744496-5314" type="0" ix="16" iy="0" event="null" tilesetId="grass"/>
+    <Tile id="1360657745538-4185" type="0" ix="20" iy="0" event="null" tilesetId="grass"/>
+    <Tile id="1360657746830-5925" type="0" ix="0" iy="4" event="null" tilesetId="grass"/>
+    <Tile id="1360657747913-3714" type="0" ix="4" iy="4" event="null" tilesetId="grass"/>
+    <Tile id="1360657748913-9503" type="0" ix="8" iy="4" event="null" tilesetId="grass"/>
+    <Tile id="1360657749873-554" type="0" ix="12" iy="4" event="null" tilesetId="grass"/>
   </Layer>
   <Layer id="overlay" z="1" visible="1">
-  	<Tile id="o1" type="0" ix="4" iy="0" event="null" tilesetId="stone"/>
+    <Tile id="o1" type="0" ix="4" iy="0" event="null" tilesetId="stone"/>
+    <Tile id="1360657753747-1332" type="0" ix="9" iy="4" event="null" tilesetId="stone"/>
   </Layer>
 </Map>

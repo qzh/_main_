@@ -4,6 +4,7 @@ package tile.display
 	
 	import starling.display.Image;
 	import starling.display.Sprite;
+	import starling.filters.BlurFilter;
 	import starling.textures.Texture;
 	
 	import tile.core.Map;
@@ -36,5 +37,20 @@ package tile.display
 			sprite.x = map.gridSize * tileData.ix;
 			sprite.y = map.gridSize * tileData.iy;
 		}
+		
+		public function onSelected(sel:Boolean):void
+		{
+			if(sel)
+			{
+				sprite.alpha = 0.5;
+				//sprite.filter = BlurFilter.createGlow(0xFFFF00, 1, 5);
+			}
+			else
+			{
+				sprite.alpha = 1;
+				//sprite.filter = null;
+			}
+		}
+		
 	}
 }

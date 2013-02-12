@@ -13,6 +13,24 @@ package tile.core
 			this.tiles = [];
 		}
 		
+		public function removeTile(t:Tile):void
+		{
+			var index:int = -1;
+			for(var i:int = 0; i < tiles.length; i++)
+			{
+				var p:Tile = tiles[i] as Tile;
+				if(p.id == t.id)
+				{
+					index = i;
+					break;
+				}
+			}
+			if(index != -1)
+			{
+				tiles.splice(index, 1);
+			}
+		}
+		
 		public function fromXML(src:XML):void
 		{
 			this.tiles = [];

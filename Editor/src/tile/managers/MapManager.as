@@ -19,6 +19,8 @@ package tile.managers
 		private static var _instance:MapManager;
 		
 		public var currentMap:Map;
+		public var currentLayer:Layer;
+		public var currentTileset:Tileset;
 		
 		[Bindable]
 		public var source:DataSource;

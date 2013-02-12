@@ -4,8 +4,8 @@ package tile.display
 	
 	import starling.display.Sprite;
 	
-	import tile.core.MapGrids;
 	import tile.core.Layer;
+	import tile.core.MapGrids;
 	import tile.core.Tile;
 
 	public class LayerDisplay extends EventDispatcher
@@ -29,19 +29,56 @@ package tile.display
 			var list:Array = layer.tiles;
 			for each(var p:Tile in list)
 			{
-				var dp:TileDisplay = new TileDisplay(p, layer.id);
-				this.tiles.push(dp);
-				this.container.addChild(dp.sprite);
-				dp.update();
+				addTile(p);
 			}
 		}
 		
-		public function updateGrid(info:MapGrids):void
+		public function updateGridInfo(info:MapGrids):void
 		{
 			for each(var dp:TileDisplay in tiles)
 			{
 				info.addTile(dp);
 			}
+		}
+		
+		public function getTileDisplay(tileId:String):TileDisplay
+		{
+			for each(var dp:TileDisplay in tiles)
+			{
+				if(dp.tileData.id == tileId)
+					return dp;
+			}
+			return null;
+		}
+		
+		public function addTile(p:Tile):TileDisplay
+		{
+			var dp:TileDisplay = new TileDisplay(p, layer.id);
+			this.tiles.push(dp);
+			this.container.addChild(dp.sprite);
+			dp.update();
+			return dp;
+		}
+		
+		public function removeTile(td:TileDisplay):void
+		{
+			var t:Tile = td.tileData;
+			var index:int = -1;
+			for(var i:int = 0; i < tiles.length; i++)
+			{
+				var p:TileDisplay = tiles[i] as TileDisplay;
+				if(p.tileData.id == t.id)
+				{
+					index = i;
+					break;
+				}
+			}
+			if(index != -1)
+			{
+				tiles.splice(index, 1);
+			}
+			
+			if(td.sprite && td.sprite.parent)td.sprite.parent.removeChild(td.sprite);
 		}
 	}
 }

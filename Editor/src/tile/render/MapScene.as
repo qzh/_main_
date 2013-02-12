@@ -12,7 +12,10 @@ package tile.render
 	import tile.core.Layer;
 	import tile.core.Map;
 	import tile.core.MapGrids;
+	import tile.core.Tile;
+	import tile.core.Tileset;
 	import tile.display.LayerDisplay;
+	import tile.display.TileDisplay;
 	import tile.managers.Director;
 	import tile.managers.MapManager;
 	import tile.utils.TileUtil;
@@ -38,6 +41,21 @@ package tile.render
 			super();
 		}
 		
+		private var _selectedTile:TileDisplay;
+		public function get selectedTile():TileDisplay
+		{
+			return _selectedTile;
+		}
+		public function set selectedTile(value:TileDisplay):void
+		{
+			if(_selectedTile != value)
+			{
+				if(_selectedTile)_selectedTile.onSelected(false);
+				_selectedTile = value;
+				if(_selectedTile)_selectedTile.onSelected(true);
+			}
+		}
+
 		override public function onEnter():void
 		{
 			super.onEnter();
@@ -85,8 +103,32 @@ package tile.render
 				tileContainer.addChild(ld.container);
 				this.layerList.push(ld);
 				
-				ld.updateGrid(gridInfo);
+				ld.updateGridInfo(gridInfo);
 			}
+		}
+		
+		public function getTileDisplay(layerId:String, tileId:String):TileDisplay
+		{
+			for each(var ld:LayerDisplay in layerList)
+			{
+				if(ld.layer.id == layerId)
+				{
+					return ld.getTileDisplay(tileId);
+				}
+			}
+			return null;
+		}
+		
+		public function getLayerDisplay(layerId:String):LayerDisplay
+		{
+			for each(var ld:LayerDisplay in layerList)
+			{
+				if(ld.layer.id == layerId)
+				{
+					return ld;
+				}
+			}
+			return null;
 		}
 		
 		private function onTouchStart(e:TouchEvent):void
@@ -102,7 +144,97 @@ package tile.render
 				var dy:int = delta.y / map.gridSize;
 				
 				var ret:Vector.<GridContent> = gridInfo.getTileID(dx, dy);
+				var layer:Layer = MapManager.getInstance().currentLayer;
+				var toolsMode:int = Director.getInstance().toolsMode;
+				var tileDisplay:TileDisplay;
+				if(ret && layer && ret.length > 0)
+				{
+					for each(var g:GridContent in ret)
+					{
+						if(g.layerID == layer.id)
+						{
+							tileDisplay = getTileDisplay(layer.id, g.tileID);
+							break;
+						}
+					}
+					
+				}
+				
+				if(toolsMode == Director.kSelectTool)
+				{
+					this.selectedTile = tileDisplay;
+				}
+				else if(toolsMode == Director.kAddTileTool)
+				{
+					this.selectedTile = null;
+					this.addTile(dx, dy);
+				}
+				else if(toolsMode == Director.kDelTileTool)
+				{
+					this.selectedTile = null;
+					this.removeTile(tileDisplay);
+				}
+				
 				trace(dx, dy, ret);
+			}
+		}
+		
+		private function removeTile(dp:TileDisplay):void
+		{
+			var layer:Layer = MapManager.getInstance().currentLayer;
+			if(!dp || !layer)return;
+			
+			var ld:LayerDisplay = this.getLayerDisplay(layer.id);
+			if(!ld) return;
+			
+			ld.removeTile(dp);
+			layer.removeTile(dp.tileData);
+			gridInfo.removeTile(dp);
+		}
+		
+		private function addTile(dx:int, dy:int):void
+		{
+			var layer:Layer = MapManager.getInstance().currentLayer;
+			var tileset:Tileset = MapManager.getInstance().currentTileset;
+			if(tileset && layer)
+			{
+				var ld:LayerDisplay = this.getLayerDisplay(layer.id);
+				if(!ld)return;
+				
+				var endX:int = dx + tileset.width;
+				var endY:int = dy + tileset.height;
+				
+				var validPosition:Boolean = true;
+				for(var i:int = dx; i < endX; i++)
+				{
+					for(var j:int = dy; j < endY; j++)
+					{
+						var ret:Vector.<GridContent> = gridInfo.getTileID(i, j);
+						if(ret && ret.length > 0)
+						{
+							for each(var gd:GridContent in ret)
+							{
+								if(gd.layerID == layer.id)
+								{
+									validPosition = false;
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				if(!validPosition)return;
+				
+				var date:Date = new Date();
+				var t:Tile = new Tile();
+				t.id = date.time + "-" + int(Math.random()*10000);
+				t.ix = dx;
+				t.iy = dy;
+				t.tilesetId = tileset.id;
+				
+				layer.tiles.push(t);
+				gridInfo.addTile(ld.addTile(t));
 			}
 		}
 		

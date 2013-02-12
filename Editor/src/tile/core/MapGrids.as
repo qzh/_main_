@@ -38,9 +38,9 @@ package tile.core
 						info = new Vector.<GridContent>();
 						infoMap[key] = info;
 					}
-					if(getGridContentIndex(t.tileset.id, info) == -1)
+					if(getGridContentIndex(t.tileData.id, info) == -1)
 					{
-						info.push(new GridContent(t.layerID, t.tileset.id));
+						info.push(new GridContent(t.layerID, t.tileData.id));
 					}
 				}
 			}
@@ -61,7 +61,7 @@ package tile.core
 					var info:Vector.<GridContent> = infoMap[key] as Vector.<GridContent>;
 					if(info)
 					{
-						var index:int = getGridContentIndex(t.tileset.id, info);
+						var index:int = getGridContentIndex(t.tileData.id, info);
 						if(index != -1)info.splice(index, 1);
 					}
 				}
