@@ -68,10 +68,11 @@
 					{
 						var label:TextField = new TextField();
 						label.textColor = 0;
+						label.defaultTextFormat = new TextFormat(null, 10, 0);
 						label.selectable = false;
 						label.text = i + "," + j;
-						label.y = j * map.gridSize + (map.gridSize - label.textWidth)/2;
-						label.x = i * map.gridSize + (map.gridSize - label.textHeight)/2;
+						label.y = j * map.gridSize + (map.gridSize - label.textHeight)/2;
+						label.x = i * map.gridSize + (map.gridSize - label.textWidth)/2;
 						shape.addChild(label);
 					}
 				}
@@ -80,6 +81,14 @@
 				
 				var img:TileImage = MapManager.getInstance().source.images.getItemAt(0) as TileImage;
 				setImageListSrc(img);
+			}
+			
+			private function onImageDown(e:MouseEvent):void
+			{
+			}
+			private function onImageUp(e:MouseEvent):void
+			{
+				
 			}
 			
 			protected function imageCombo_changeHandler(event:IndexChangeEvent):void
@@ -103,11 +112,14 @@
 				var img:BitmapSet = imageList.selectedItem as BitmapSet;
 				if(img)
 				{
-					this.imagePreview.source = img.bitmap
+					var map:Map = MapManager.getInstance().currentMap;
+					this.imagePreview.source = img.bitmap;
+					previewImageInfo.text = int(img.bitmap.width/map.gridSize) + "," + int(img.bitmap.height/map.gridSize) + "; image size:" + img.bitmap.width + "/" + img.bitmap.height;
 				}
 				else
 				{
 					this.imagePreview.source = null;
+					previewImageInfo.text = "";
 				}
 			}
 			
@@ -125,11 +137,14 @@
 	<s:ComboBox id="imageCombo" x="600" y="10" change="imageCombo_changeHandler(event)"
 				dataProvider="{MapManager.getInstance().source.images}" labelField="path"
 				selectedIndex="0"/>
-	<s:BorderContainer id="previewContainer" x="600" y="41" width="288" height="288">
+	<s:Group id="previewContainer" x="600" y="41" width="288" height="288">
 		<s:BitmapImage id="imagePreview" x="0" y="0" width="288" height="288" scaleMode="zoom" fillMode="clip" horizontalAlign="left" verticalAlign="top"/>
-	</s:BorderContainer>
+	</s:Group>
 	<s:NumericStepper id="widthStepper" x="10" y="379" minimum="1" stepSize="1" value="2"/>
 	<s:NumericStepper id="heightStepper" x="71" y="379" minimum="1" stepSize="1" value="2"/>
 	<s:NumericStepper id="weightStepper" x="539" y="379" minimum="0" stepSize="1" value="0"/>
 	<s:TextInput id="idInput" x="132" y="380" width="399"/>
+	<s:Label x="10" y="404" width="582" color="#666666" fontStyle="italic"
+			 text="width         height         ID                                                                                                                       weight"/>
+	<s:Label id="previewImageInfo" x="600" y="337" width="288"/>
 </s:TitleWindow>

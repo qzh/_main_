@@ -24,7 +24,7 @@ package tile.core
 			this.iy = parseInt(src.@iy);
 			
 			this.event = src.@event;
-			this.tilesetId = src.@imageId;
+			this.tilesetId = src.@tilesetId;
 		}
 		
 		public function toXML():XML

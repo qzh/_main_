@@ -5,6 +5,7 @@ package tile.utils
 	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.text.TextField;
+	import flash.text.TextFormat;
 	
 	import tile.core.Map;
 
@@ -26,10 +27,11 @@ package tile.utils
 				{
 					var label:TextField = new TextField();
 					label.textColor = 0;
+					label.defaultTextFormat = new TextFormat(null, 8, 0);
 					label.selectable = false;
 					label.text = i + "," + j;
-					label.y = j * map.gridSize + (map.gridSize - label.textWidth)/2;
-					label.x = i * map.gridSize + (map.gridSize - label.textHeight)/2;
+					label.y = j * map.gridSize + (map.gridSize - label.textHeight)/2;
+					label.x = i * map.gridSize + (map.gridSize - label.textWidth)/2;
 					shape.addChild(label);
 				}
 			}
@@ -38,7 +40,7 @@ package tile.utils
 			var w:int = map.gridSize * map.width;
 			var h:int = map.gridSize * map.height;
 			
-			var bmd:BitmapData = new BitmapData(w+1, h+1);
+			var bmd:BitmapData = new BitmapData(w+1, h+1, true, 0);
 			bmd.draw(shape);
 			
 			return new Bitmap(bmd);

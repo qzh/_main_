@@ -26,6 +26,9 @@
 				var vp:Rectangle = new Rectangle(container.x, container.y, container.width, container.height);
 				var star:StarlingRoot = new StarlingRoot(vp);
 				container.addElement(star);
+				
+				var layerLength:int = MapManager.getInstance().source.layers.length;
+				layerList.selectedItem = MapManager.getInstance().source.layers.getItemAt(layerLength-1);
 			}
 			
 			protected function addLayerButton_clickHandler(event:MouseEvent):void
@@ -70,10 +73,11 @@
 				MapManager.getInstance().save();
 			}
 			
+			
 		]]>
 	</fx:Script>
 	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
+		<s:RadioButtonGroup id="TileTools"/>
 	</fx:Declarations>
 	<s:Button x="11" y="10" id="saveButton" width="107" height="35" label="Save..." click="saveButton_clickHandler(event)"/>
 	<s:List id="layerList" x="10" y="55" width="250" height="300"
@@ -82,14 +86,14 @@
 	<s:Button id="addLayerButton" x="10" y="363" label="+ Layer"
 			  click="addLayerButton_clickHandler(event)" enabled="false"/>
 	<s:Button id="deleteLayerButton" x="92" y="363" label="- Layer"
-			  click="deleteLayerButton_clickHandler(event)"/>
+			  click="deleteLayerButton_clickHandler(event)" enabled="false"/>
 	<s:List id="imageList" x="10" y="400" width="250" height="300"
 			dataProvider="{MapManager.getInstance().source.images}"
 			itemRenderer="editor.view.ImageItemRenderer"></s:List>
 	<s:Button id="addImageButton" x="10" y="708" label="+ Image"
 			  click="addImageButton_clickHandler(event)" enabled="false"/>
 	<s:Button id="removeImageButton" x="92" y="708" label="- Image"
-			  click="removeImageButton_clickHandler(event)"/>
+			  click="removeImageButton_clickHandler(event)" enabled="false"/>
 	<s:List id="tilesetList" x="794" y="55" width="220" height="645"
 			dataProvider="{MapManager.getInstance().source.tilesets}"
 			itemRenderer="editor.view.TilesetItemRenderer"></s:List>
@@ -99,4 +103,11 @@
 			  click="deleteTilesetButton_clickHandler(event)"/>
 	<s:BorderContainer id="container" x="268" y="55" width="518" height="645" backgroundAlpha="0"
 					   borderColor="#000000" borderStyle="solid" borderWeight="1"/>
+	<s:HGroup x="413" y="30">
+		<s:RadioButton label="Select" groupName="TileTools" id="selectTileRadio" selected="true"/>
+		<s:RadioButton label="+ Tile" groupName="TileTools" id="addTileRadio"/>
+		<s:RadioButton label="- Tile" groupName="TileTools" id="deleteTileRadio"/>
+		<s:RadioButton label="Edit" groupName="TileTools" id="editTileRadio"/>
+	</s:HGroup>
+	
 </s:WindowedApplication>

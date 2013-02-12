@@ -6,8 +6,11 @@ package tile.managers
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	
+	import tile.core.Layer;
 	import tile.core.Map;
+	import tile.core.Tile;
 	import tile.core.TileImage;
+	import tile.core.Tileset;
 
 	public final class MapManager
 	{
@@ -67,6 +70,54 @@ package tile.managers
 			for each(var p:TileImage in arr)
 			{
 				if(p.id == imageId)return p.path;
+			}
+			return null;
+		}
+		
+		public function getLayers():Array
+		{
+			var ret:Array = [];
+			var src:Array = source.layers.source;
+			for each(var p:Layer in src)
+			{
+				ret.push(p);
+			}
+			return ret;
+		}
+		
+		public function getTileSet(id:String):Tileset
+		{
+			var src:Array = source.tilesets.source;
+			for each(var p:Tileset in src)
+			{
+				if(p.id == id)return p;
+			}
+			return null;
+		}
+		
+		public function getLayerByID(layerId:String):Layer
+		{
+			var src:Array = source.layers.source;
+			for each(var p:Layer in src)
+			{
+				if(p.id == layerId)
+				{
+					return p;
+				}
+			}
+			return null;
+		}
+		
+		public function getTileByLayer(layerId:String, tileId:String):Tile
+		{
+			var layer:Layer = getLayerByID(layerId);
+			if(layer)
+			{
+				var src:Array = layer.tiles;
+				for each(var p:Tile in src)
+				{
+					if(p.id == tileId)return p;
+				}
 			}
 			return null;
 		}
