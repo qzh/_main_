@@ -1,6 +1,5 @@
 package tile.managers
 {
-	import editor.data.BitmapSet;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

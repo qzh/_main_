@@ -6,7 +6,7 @@
 			   creationComplete="titlewindow1_creationCompleteHandler(event)" title="New Tileset">
 	<fx:Script>
 		<![CDATA[
-			import editor.data.BitmapSet;
+			import tile.managers.BitmapSet;
 			import editor.data.TilesetX;
 			
 			import mx.collections.ArrayCollection;

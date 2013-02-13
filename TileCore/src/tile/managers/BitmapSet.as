@@ -1,4 +1,4 @@
-package editor.data
+package tile.managers
 {
 	import flash.display.BitmapData;
 
